@@ -3,16 +3,24 @@
 > **The Personal Intellectual Universe & Autonomous Digital Bookshelf**  
 > A local-first, privacy-respecting digital library system featuring unified multi-provider catalog discovery, 3D skeuomorphic page-flip reading logs, 36 handcrafted themes, 12 font families, and isolated multi-user profiles.
 
-[![Live Demo](https://img.shields.io/badge/Demo-Live_Deployment-success?logo=githubpages&logoColor=white)](https://thunderbolt66-wav.github.io/omnidex/)
+[![Netlify Status](https://img.shields.io/badge/Netlify-Live_Production-00C7B7?logo=netlify&logoColor=white)](https://omnidex-digishelf.netlify.app/)
+[![GitHub Pages](https://img.shields.io/badge/GitHub_Pages-Live_Mirror-success?logo=githubpages&logoColor=white)](https://thunderbolt66-wav.github.io/omnidex/)
 [![React](https://img.shields.io/badge/React-19.2-61DAFB?logo=react&logoColor=black)](https://react.dev/)
 [![Vite](https://img.shields.io/badge/Vite-8.3-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
 [![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3.4-38B2AC?logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
 [![Zustand](https://img.shields.io/badge/Zustand-5.0-brown)](https://github.com/pmndrs/zustand)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
-🔗 **Live Application**: [https://thunderbolt66-wav.github.io/omnidex/](https://thunderbolt66-wav.github.io/omnidex/)
+🚀 **Live Production (Netlify)**: [https://omnidex-digishelf.netlify.app/](https://omnidex-digishelf.netlify.app/)  
+🪐 **Alternative Mirror (GitHub Pages)**: [https://thunderbolt66-wav.github.io/omnidex/](https://thunderbolt66-wav.github.io/omnidex/)
 
 ---
+
+## 🖼️ Interface Preview
+
+| Desktop Reading Sanctuary & OmniSearch | Mobile Curated Recommendations |
+| :---: | :---: |
+| ![Omnidex Desktop Dashboard](screenshots/omnidex-dashboard.png) | ![Omnidex Mobile View](screenshots/omnidex-mobile.png) |
 
 ## 🌟 Key Highlights
 
