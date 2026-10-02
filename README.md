@@ -22,6 +22,50 @@
 | :---: | :---: |
 | ![Omnidex Desktop Dashboard](screenshots/omnidex-dashboard.png) | ![Omnidex Mobile View](screenshots/omnidex-mobile.png) |
 
+---
+
+## 💡 What Omnidex Offers
+
+**Omnidex** is an autonomous personal reading sanctum and intellectual catalog designed for readers, researchers, and book collectors who value **privacy, aesthetic typography, and zero-friction curation**.
+
+Most modern reading apps require sign-ups, sell your reading telemetry, lock your notes into proprietary silos, or clutter your reading space with intrusive ads. Omnidex replaces that fragmented experience with a single, elegant, and 100% client-side bookshelf:
+
+### 1. 🪐 Unified Global Discovery Without Accounts
+Instead of jumping between multiple websites, Omnidex federates search queries simultaneously across **Project Gutenberg**, **Open Library**, **Internet Archive**, and **Google Books** alongside a curated offline vault. Search by book title, author, or subject and add volumes to your permanent shelf with one click.
+
+### 2. 📖 Realistic 3D Skeuomorphic Reading Log
+Reading isn't just about text on a flat screen. Omnidex brings the tactile warmth of physical books to the browser:
+- **GPU-Accelerated 3D Page Turns**: Flip through your reading log with realistic paper physics, page sheen, and spine shadow simulation.
+- **Reading Progress & Bookmark Tracking**: Keep track of current pages read, dynamic percentage completions, and volume statuses.
+- **Dedicated Volume Notes Journal**: Jot down memorable passages, thoughts, questions, and chapter insights tied directly to each book.
+- **Flat Mode Fallback**: Full support for users who prefer standard flat modals via the *Reduce Motion* toggle.
+
+### 3. 👥 True Multi-Profile Isolation on One Device
+Share your computer or organize different reading domains (Fiction, Academic, Work, Personal) without data bleeding:
+- **Zero Cloud Account Dependency**: Profiles exist purely on your local device.
+- **Strict Partitioning**: Bookshelves, search histories, themes, and font preferences in one profile remain completely invisible to other profiles.
+- **Default Guest Profile**: Starts cleanly with a single prebuilt `Guest` profile on initial visit.
+- **20+ Expressive Avatars & Custom Uploads**: Personalize profiles with custom artwork or choose from over 20 tailored SVG avatar personas.
+- **PIN-Lock Privacy**: Protect personal or private reading shelves with local SHA-256 4-digit PIN verification.
+- **1-Click Portability**: Export your entire digital universe to a single encrypted JSON file and import it anywhere instantly.
+
+### 4. 🎨 36 Handcrafted Color Themes & 12 Curated Fonts
+Your reading sanctuary should match your ambient environment and mood:
+- **8 Tactile Paper Textures**: Authentic reading simulations calibrated for *Parchment, Newsprint, Cream Book, Kraft Paper, Blueprint Grid, Legal Pad, Washi, and Cotton Rag*.
+- **OLED, Dark & Cyberpunk Palettes**: Low-light reading with *Midnight Obsidian, Tokyo Night, Dracula, Gruvbox, Nord, Monokai, OLED Pure Black, Solarized Dark, and Espresso Warmth*.
+- **12 Curated Typographic Families**: Seamless switching between timeless serif types (*Cinzel, Playfair Display, Merriweather, Lora, EB Garamond, Cormorant*), modern sans-serifs (*Outfit, Inter, Plus Jakarta Sans*), and monospaced terminal fonts (*Fira Code, Space Grotesk*).
+- **Custom Slim Scrollbars**: Eliminates clumsy browser-default scrollbars that break page aesthetics and waste screen space.
+
+### 5. 🖌️ Algorithmic Typographic Cover Generation
+Never endure broken or missing cover art. When creating a custom volume or cataloging rare texts, Omnidex automatically generates a bespoke, publication-grade cover on HTML5 Canvas using classical typography layouts and harmonious color palettes.
+
+### 6. 🔒 100% Privacy & Data Sovereignty
+- **No Trackers, No Analytics, No Cookies**: Your reading habits belong strictly to you.
+- **Works Offline**: The entire catalog engine, shelf management, and flipbook reader work completely offline without an active internet connection.
+- **Optional Cloud Backup**: Built-in optional [Supabase](https://supabase.com/) sync if you choose to synchronize across your personal devices.
+
+---
+
 ## 🌟 Key Highlights
 
 ### 🪐 Unified OmniSearch
