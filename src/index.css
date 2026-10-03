@@ -273,46 +273,27 @@ html {
     inset 0 1px 0 0 rgba(255, 255, 255, 0.28);
 }
 
-/* Floating Bottom Navigation Dock (Exact Kimi AI Mobile Spec from reference) */
+/* Floating Bottom Navigation Dock (Dynamic Crystalline Glass Engine) */
 .glass-dock {
-  background: rgba(10, 10, 14, 0.94) !important;
-  backdrop-filter: blur(36px) saturate(200%) contrast(110%);
+  backdrop-filter: blur(36px) saturate(200%) contrast(108%);
   -webkit-backdrop-filter: blur(36px) saturate(200%);
-  border: 1px solid rgba(255, 255, 255, 0.14) !important;
-  box-shadow: 
-    0 24px 60px -8px rgba(0, 0, 0, 0.75),
-    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.22) !important;
+  transition: background-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* Active tab capsule with illuminated background and crisp white typography */
+/* Active tab capsule with illuminated background and crisp typography */
 .glass-tab-capsule {
-  background: rgba(255, 255, 255, 0.16) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  color: #ffffff !important;
-  box-shadow: 
-    0 2px 12px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.28) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Center Highlighted Plus Button */
 .glass-add-button {
-  background: rgba(255, 255, 255, 0.12) !important;
-  border: 1px solid rgba(255, 255, 255, 0.22) !important;
-  color: #ffffff !important;
-  box-shadow: 
-    0 4px 16px rgba(0, 0, 0, 0.3),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.25) !important;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .glass-add-button:hover {
-  background: rgba(255, 255, 255, 0.22) !important;
-  border-color: rgba(255, 255, 255, 0.38) !important;
-  box-shadow: 
-    0 8px 24px rgba(0, 0, 0, 0.45),
-    0 0 16px rgba(255, 255, 255, 0.2),
-    inset 0 1px 0 0 rgba(255, 255, 255, 0.4) !important;
   transform: translateY(-2px) scale(1.06);
 }
 

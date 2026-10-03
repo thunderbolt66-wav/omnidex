@@ -338,7 +338,7 @@ export const THEME_LIST = [
   },
 ];
 
-export function getThemeClasses(theme) {
+function getRawThemeClasses(theme) {
   switch (theme) {
     // ---------------- AUTHENTIC PHYSICAL PAPERS ----------------
     case 'sepia':
@@ -1074,3 +1074,208 @@ export function getThemeClasses(theme) {
       };
   }
 }
+
+/**
+ * Calculates adaptive, theme-specific dock styles for all 36 themes.
+ * Guarantees that light/paper themes get tactile paper-glass docks,
+ * vibrant themes get neon glows, and dark themes get crystalline obsidian.
+ */
+export function getDockStyles(themeId) {
+  const themeObj = THEME_LIST.find((t) => t.id === themeId);
+  const category = themeObj?.category || 'Dark';
+
+  switch (themeId) {
+    // 1. Canary Legal Pad (Yellow pad, Navy Ink, Golden edge)
+    case 'legal-pad':
+      return {
+        dock: 'bg-[#FEF9C3]/92 text-[#1E293B] border-[#CA8A04]/40 shadow-[0_20px_50px_rgba(202,138,4,0.22)] backdrop-blur-2xl',
+        dockActive: 'bg-[#1E3A8A] text-[#FEF9C3] border-[#1E3A8A] shadow-md font-semibold',
+        dockInactive: 'text-[#1E293B]/70 hover:text-[#1E293B] hover:bg-[#1E293B]/10',
+        dockAdd: 'bg-[#1E3A8A]/15 text-[#1E3A8A] border-[#1E3A8A]/30 hover:bg-[#1E3A8A]/25',
+      };
+
+    // 2. Parchment (Aged vellum & iron gall ink)
+    case 'sepia':
+      return {
+        dock: 'bg-[#F4ECD8]/92 text-[#433422] border-[#c8b99d] shadow-[0_20px_50px_rgba(67,52,34,0.2)] backdrop-blur-2xl',
+        dockActive: 'bg-[#433422] text-[#F4ECD8] border-[#433422] shadow-md font-semibold',
+        dockInactive: 'text-[#433422]/70 hover:text-[#433422] hover:bg-[#433422]/10',
+        dockAdd: 'bg-[#433422]/15 text-[#433422] border-[#433422]/30 hover:bg-[#433422]/25',
+      };
+
+    // 3. Newsprint
+    case 'newsprint':
+      return {
+        dock: 'bg-[#EFECE6]/92 text-[#18181A] border-[#CEC8BC] shadow-xl backdrop-blur-2xl',
+        dockActive: 'bg-[#18181A] text-[#F6F4EE] border-[#18181A] shadow-md font-semibold',
+        dockInactive: 'text-[#18181A]/70 hover:text-[#18181A] hover:bg-[#18181A]/10',
+        dockAdd: 'bg-[#18181A]/15 text-[#18181A] border-[#18181A]/30 hover:bg-[#18181A]/25',
+      };
+
+    // 4. Munken Cream
+    case 'book-cream':
+      return {
+        dock: 'bg-[#F7F4EB]/92 text-[#292524] border-[#DDD5C5] shadow-xl backdrop-blur-2xl',
+        dockActive: 'bg-[#991B1B] text-[#FAF8F2] border-[#991B1B] shadow-md font-semibold',
+        dockInactive: 'text-[#292524]/70 hover:text-[#292524] hover:bg-[#292524]/10',
+        dockAdd: 'bg-[#991B1B]/15 text-[#991B1B] border-[#991B1B]/30 hover:bg-[#991B1B]/25',
+      };
+
+    // 5. Kraft
+    case 'kraft':
+      return {
+        dock: 'bg-[#D8C7B0]/92 text-[#28211A] border-[#B8A285] shadow-xl backdrop-blur-2xl',
+        dockActive: 'bg-[#28211A] text-[#E2D3BE] border-[#28211A] shadow-md font-semibold',
+        dockInactive: 'text-[#28211A]/70 hover:text-[#28211A] hover:bg-[#28211A]/10',
+        dockAdd: 'bg-[#28211A]/15 text-[#28211A] border-[#28211A]/30 hover:bg-[#28211A]/25',
+      };
+
+    // 6. Japanese Washi
+    case 'washi':
+      return {
+        dock: 'bg-[#FAF7F0]/92 text-[#242220] border-[#DDD7C8] shadow-xl backdrop-blur-2xl',
+        dockActive: 'bg-[#C2410C] text-[#FAF7F0] border-[#C2410C] shadow-md font-semibold',
+        dockInactive: 'text-[#242220]/70 hover:text-[#242220] hover:bg-[#242220]/10',
+        dockAdd: 'bg-[#C2410C]/15 text-[#C2410C] border-[#C2410C]/30 hover:bg-[#C2410C]/25',
+      };
+
+    // 7. Engineering Grid
+    case 'engineering-pad':
+      return {
+        dock: 'bg-[#EEF5F0]/92 text-[#047857] border-[#A7F3D0]/60 shadow-xl backdrop-blur-2xl',
+        dockActive: 'bg-[#047857] text-[#EEF5F0] border-[#047857] shadow-md font-semibold',
+        dockInactive: 'text-[#047857]/70 hover:text-[#047857] hover:bg-[#047857]/10',
+        dockAdd: 'bg-[#047857]/15 text-[#047857] border-[#047857]/30 hover:bg-[#047857]/25',
+      };
+
+    // 8. Cotton Rag
+    case 'cotton-rag':
+      return {
+        dock: 'bg-[#F5F2ED]/92 text-[#334155] border-[#CBD5E1] shadow-xl backdrop-blur-2xl',
+        dockActive: 'bg-[#334155] text-[#F5F2ED] border-[#334155] shadow-md font-semibold',
+        dockInactive: 'text-[#334155]/70 hover:text-[#334155] hover:bg-[#334155]/10',
+        dockAdd: 'bg-[#334155]/15 text-[#334155] border-[#334155]/30 hover:bg-[#334155]/25',
+      };
+
+    // 9. Blueprint
+    case 'blueprint':
+      return {
+        dock: 'bg-[#133857]/92 text-[#38BDF8] border-[#38BDF8]/40 shadow-xl backdrop-blur-2xl',
+        dockActive: 'bg-[#38BDF8] text-[#133857] border-[#38BDF8] shadow-md font-bold',
+        dockInactive: 'text-[#38BDF8]/70 hover:text-[#38BDF8] hover:bg-[#38BDF8]/15',
+        dockAdd: 'bg-[#38BDF8]/20 text-[#38BDF8] border-[#38BDF8]/40 hover:bg-[#38BDF8]/30',
+      };
+
+    // 10. Cyberpunk
+    case 'cyberpunk':
+      return {
+        dock: 'bg-[#080c14]/92 text-[#00f2fe] border-[#00f2fe]/40 shadow-[0_20px_50px_rgba(0,242,254,0.25)] backdrop-blur-2xl',
+        dockActive: 'bg-[#00f2fe]/25 text-[#00f2fe] border-[#00f2fe]/60 shadow-[0_0_15px_rgba(0,242,254,0.35)]',
+        dockInactive: 'text-[#00f2fe]/60 hover:text-[#00f2fe] hover:bg-[#00f2fe]/10',
+        dockAdd: 'bg-[#ec4899]/25 text-[#ec4899] border-[#ec4899]/50 hover:bg-[#ec4899]/35',
+      };
+
+    // 11. Phosphor Matrix
+    case 'matrix':
+      return {
+        dock: 'bg-[#030904]/92 text-[#86efac] border-[#22c55e]/40 shadow-[0_20px_50px_rgba(34,197,94,0.25)] backdrop-blur-2xl',
+        dockActive: 'bg-[#22c55e]/25 text-[#22c55e] border-[#22c55e]/60 shadow-[0_0_15px_rgba(34,197,94,0.35)]',
+        dockInactive: 'text-[#86efac]/60 hover:text-[#86efac] hover:bg-[#22c55e]/10',
+        dockAdd: 'bg-[#22c55e]/25 text-[#22c55e] border-[#22c55e]/50 hover:bg-[#22c55e]/35',
+      };
+
+    // 12. Dracula
+    case 'dracula':
+      return {
+        dock: 'bg-[#1e1f29]/92 text-[#f8f8f2] border-[#bd93f9]/30 shadow-2xl backdrop-blur-2xl',
+        dockActive: 'bg-[#ff79c6]/25 text-[#ff79c6] border-[#ff79c6]/50 shadow-md',
+        dockInactive: 'text-[#f8f8f2]/60 hover:text-[#f8f8f2] hover:bg-white/10',
+        dockAdd: 'bg-[#bd93f9]/20 text-[#bd93f9] border-[#bd93f9]/40 hover:bg-[#bd93f9]/30',
+      };
+
+    // 13. Tokyo Night
+    case 'tokyo-night':
+      return {
+        dock: 'bg-[#13141c]/92 text-[#7aa2f7] border-[#7aa2f7]/30 shadow-2xl backdrop-blur-2xl',
+        dockActive: 'bg-[#7aa2f7]/25 text-[#7aa2f7] border-[#7aa2f7]/50 shadow-md',
+        dockInactive: 'text-[#7aa2f7]/60 hover:text-[#7aa2f7] hover:bg-white/10',
+        dockAdd: 'bg-[#bb9af7]/20 text-[#bb9af7] border-[#bb9af7]/40 hover:bg-[#bb9af7]/30',
+      };
+
+    // 14. Forest & Emerald
+    case 'forest':
+    case 'emerald':
+      return {
+        dock: 'bg-[#0a1310]/92 text-[#ecfdf5] border-[#10b981]/30 shadow-2xl backdrop-blur-2xl',
+        dockActive: 'bg-[#10b981]/25 text-[#10b981] border-[#10b981]/50 shadow-md',
+        dockInactive: 'text-[#ecfdf5]/60 hover:text-[#ecfdf5] hover:bg-white/10',
+        dockAdd: 'bg-[#10b981]/25 text-[#10b981] border-[#10b981]/40 hover:bg-[#10b981]/35',
+      };
+
+    // 15. Nordic & Ocean
+    case 'nordic':
+    case 'ocean':
+    case 'aurora':
+      return {
+        dock: 'bg-[#0b1120]/92 text-[#f0f9ff] border-[#38bdf8]/30 shadow-2xl backdrop-blur-2xl',
+        dockActive: 'bg-[#38bdf8]/25 text-[#38bdf8] border-[#38bdf8]/50 shadow-md',
+        dockInactive: 'text-[#f0f9ff]/60 hover:text-[#f0f9ff] hover:bg-white/10',
+        dockAdd: 'bg-[#38bdf8]/25 text-[#38bdf8] border-[#38bdf8]/40 hover:bg-[#38bdf8]/35',
+      };
+
+    // 16. Warm Atmospheres
+    case 'amber':
+    case 'espresso':
+    case 'copper':
+    case 'gruvbox':
+      return {
+        dock: 'bg-[#140f0a]/92 text-[#fef3c7] border-[#f59e0b]/30 shadow-2xl backdrop-blur-2xl',
+        dockActive: 'bg-[#f59e0b]/25 text-[#f59e0b] border-[#f59e0b]/50 shadow-md',
+        dockInactive: 'text-[#fef3c7]/60 hover:text-[#fef3c7] hover:bg-white/10',
+        dockAdd: 'bg-[#f59e0b]/25 text-[#f59e0b] border-[#f59e0b]/40 hover:bg-[#f59e0b]/35',
+      };
+
+    // 17. Crisp Light
+    case 'light':
+    case 'sakura':
+    case 'matcha':
+    case 'porcelain':
+    case 'linen':
+      return {
+        dock: 'bg-white/90 text-zinc-800 border-zinc-300/80 shadow-xl backdrop-blur-2xl',
+        dockActive: 'bg-zinc-900 text-white border-zinc-900 shadow-md font-semibold',
+        dockInactive: 'text-zinc-600 hover:text-zinc-950 hover:bg-black/5',
+        dockAdd: 'bg-black/10 text-zinc-900 border-black/20 hover:bg-black/15',
+      };
+
+    default:
+      if (category === 'Paper' || category === 'Light') {
+        return {
+          dock: 'bg-white/90 text-zinc-800 border-zinc-300/80 shadow-xl backdrop-blur-2xl',
+          dockActive: 'bg-zinc-900 text-white border-zinc-900 shadow-md font-semibold',
+          dockInactive: 'text-zinc-600 hover:text-zinc-950 hover:bg-black/5',
+          dockAdd: 'bg-black/10 text-zinc-900 border-black/20 hover:bg-black/15',
+        };
+      }
+      return {
+        dock: 'bg-[#0a0c10]/92 text-zinc-100 border-zinc-800/80 shadow-2xl backdrop-blur-2xl',
+        dockActive: 'bg-white/18 text-white border-white/20 shadow-md font-semibold',
+        dockInactive: 'text-zinc-400 hover:text-white hover:bg-white/10',
+        dockAdd: 'bg-white/12 text-white border-white/25 hover:bg-white/20',
+      };
+  }
+}
+
+export function getThemeClasses(theme) {
+  const base = getRawThemeClasses(theme);
+  const dockStyles = getDockStyles(theme);
+
+  return {
+    ...base,
+    dock: dockStyles.dock,
+    dockActive: dockStyles.dockActive,
+    dockInactive: dockStyles.dockInactive,
+    dockAdd: dockStyles.dockAdd,
+  };
+}
+

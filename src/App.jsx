@@ -3,11 +3,11 @@ import { useSettingsStore } from './store/useSettingsStore';
 import LibraryGrid from './components/LibraryGrid';
 import InsightsView from './components/InsightsView';
 import AddSearchView from './components/AddSearchView';
+import SettingsView from './components/SettingsView';
 import AccountView from './components/AccountView';
 import BottomNavBar from './components/BottomNavBar';
 import InteractiveBookModal from './components/InteractiveBookModal';
 import ManualBookModal from './components/ManualBookModal';
-import SettingsPanel from './components/SettingsPanel';
 import ProfileModal from './components/ProfileModal';
 import { Compass, RefreshCw, CheckCircle2, BookPlus } from 'lucide-react';
 import { getThemeClasses } from './lib/themeStyles';
@@ -20,12 +20,13 @@ export default function App() {
     try {
       const params = new URLSearchParams(window.location.search);
       const tabParam = params.get('tab');
-      if (['home', 'insights', 'add', 'account'].includes(tabParam)) {
+      if (['home', 'insights', 'add', 'settings', 'account'].includes(tabParam)) {
         return tabParam;
       }
     } catch {}
     return 'home';
   });
+
   const [selectedBook, setSelectedBook] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshNotice, setRefreshNotice] = useState(null);
@@ -63,23 +64,33 @@ export default function App() {
     };
   }, []);
 
-  // Keyboard shortcut listener (1: Home, 2: Insights, 3: Add, 4: Account)
+  const theme = useSettingsStore((state) => state.theme);
+  const fontFamily = useSettingsStore((state) => state.fontFamily);
+  const themeStyles = getThemeClasses(theme);
+
+  // Synchronize <html> dark class with active theme
+  useEffect(() => {
+    if (themeStyles.root.includes('dark')) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+  }, [themeStyles.root]);
+
+  // Keyboard shortcut listener (1: Home, 2: Insights, 3: Add, 4: Settings, 5: Account)
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
       if (e.key === '1') setActiveTab('home');
       else if (e.key === '2') setActiveTab('insights');
       else if (e.key === '3') setActiveTab('add');
-      else if (e.key === '4') setActiveTab('account');
+      else if (e.key === '4') setActiveTab('settings');
+      else if (e.key === '5') setActiveTab('account');
     };
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
-
-  const theme = useSettingsStore((state) => state.theme);
-  const fontFamily = useSettingsStore((state) => state.fontFamily);
-  const themeStyles = getThemeClasses(theme);
 
   // Open manual creation modal optionally with a prefilled query title
   const handleOpenManualModal = (title = '') => {
@@ -122,7 +133,7 @@ export default function App() {
     <div
       className={`min-h-screen w-full relative transition-colors duration-300 ${fontFamily} ${themeStyles.root}`}
     >
-      {/* Kimi AI Ambient Background Refraction Mesh */}
+      {/* Ambient Background Refraction Mesh */}
       <div className="glass-ambient-glow">
         <div className="glass-orb-1" />
         <div className="glass-orb-2" />
@@ -166,7 +177,7 @@ export default function App() {
               </span>
             )}
 
-            {/* Reader Profile Trigger (Switches to Account tab or opens modal) */}
+            {/* Reader Profile Trigger (Switches to Account tab) */}
             <button
               onClick={() => setActiveTab('account')}
               className={`flex items-center gap-2 pl-1 pr-2.5 py-1 sm:pl-1.5 sm:pr-3.5 sm:py-1 rounded-full border text-xs font-medium transition-all shadow-sm hover:scale-105 active:scale-95 border-current border-opacity-20 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 ${
@@ -244,7 +255,7 @@ export default function App() {
           </section>
         )}
 
-        {/* Tab 3: Search & Add Books (+) */}
+        {/* Tab 3: Search & Add Books (+) in the Center */}
         {activeTab === 'add' && (
           <section className="animate-fade-in">
             <AddSearchView
@@ -257,7 +268,14 @@ export default function App() {
           </section>
         )}
 
-        {/* Tab 4: Account & Profile Switching */}
+        {/* Tab 4: Settings (Integrated directly into the dock) */}
+        {activeTab === 'settings' && (
+          <section className="animate-fade-in">
+            <SettingsView />
+          </section>
+        )}
+
+        {/* Tab 5: Account & Profile Switching */}
         {activeTab === 'account' && (
           <section className="animate-fade-in">
             <AccountView
@@ -267,7 +285,7 @@ export default function App() {
         )}
       </main>
 
-      {/* Floating Kimi AI-Style Bottom Navigation Dock */}
+      {/* Floating Dynamic Bottom Navigation Dock with 5 options */}
       <BottomNavBar
         activeTab={activeTab}
         onTabChange={(tabId) => {
@@ -310,9 +328,6 @@ export default function App() {
           }
         }}
       />
-
-      {/* Floating Settings FAB & Flyout */}
-      <SettingsPanel />
 
       {/* Reader Profile Switcher & Manager Modal */}
       <ProfileModal

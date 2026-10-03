@@ -7,7 +7,11 @@ const getStoredSettings = () => {
     const active = getActiveProfile();
     const activeId = active?.id || getActiveProfileId();
 
+    const urlParams = typeof window !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+    const urlTheme = urlParams?.get('theme');
+
     const theme =
+      urlTheme ||
       localStorage.getItem(`antigravity_theme_${activeId}`) ||
       active?.theme ||
       localStorage.getItem('antigravity_theme') ||
