@@ -172,3 +172,169 @@ html {
   font-family: 'Fira Code', 'Cascadia Code', Consolas, 'Courier New', monospace;
 }
 
+/* ==========================================================================
+   Kimi AI-Grade Crystalline Glassmorphism Design System
+   ========================================================================== */
+
+/* Ambient luminous background glow for optical glass refraction */
+.glass-ambient-glow {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  contain: strict;
+}
+
+.glass-orb-1 {
+  position: absolute;
+  top: -10%;
+  left: 20%;
+  width: 55vw;
+  height: 55vw;
+  max-width: 650px;
+  max-height: 650px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.12) 0%, rgba(99, 102, 241, 0.06) 50%, transparent 75%);
+  filter: blur(80px);
+  animation: floatOrb1 24s ease-in-out infinite alternate;
+}
+
+.glass-orb-2 {
+  position: absolute;
+  top: 35%;
+  right: -5%;
+  width: 50vw;
+  height: 50vw;
+  max-width: 600px;
+  max-height: 600px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(236, 72, 153, 0.09) 0%, rgba(168, 85, 247, 0.05) 50%, transparent 75%);
+  filter: blur(90px);
+  animation: floatOrb2 28s ease-in-out infinite alternate;
+}
+
+.glass-orb-3 {
+  position: absolute;
+  bottom: 5%;
+  left: 5%;
+  width: 45vw;
+  height: 45vw;
+  max-width: 550px;
+  max-height: 550px;
+  border-radius: 9999px;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.08) 0%, rgba(20, 184, 166, 0.04) 50%, transparent 75%);
+  filter: blur(85px);
+  animation: floatOrb1 32s ease-in-out infinite alternate-reverse;
+}
+
+@keyframes floatOrb1 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(30px, 40px) scale(1.08); }
+  100% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+@keyframes floatOrb2 {
+  0% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-40px, -30px) scale(1.06); }
+  100% { transform: translate(25px, 35px) scale(0.97); }
+}
+
+/* Core Glassmorphic Surfaces */
+.glass-panel {
+  background: rgba(18, 18, 24, 0.72);
+  backdrop-filter: blur(28px) saturate(190%) contrast(105%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 20px 50px -12px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.2);
+}
+
+.glass-card {
+  background: rgba(22, 22, 28, 0.65);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 
+    0 12px 30px -8px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.03) inset,
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-card:hover {
+  background: rgba(28, 28, 36, 0.75);
+  border-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 
+    0 20px 45px -10px rgba(0, 0, 0, 0.55),
+    0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.28);
+}
+
+/* Floating Bottom Navigation Dock (Exact Kimi AI Mobile Spec from reference) */
+.glass-dock {
+  background: rgba(10, 10, 14, 0.94) !important;
+  backdrop-filter: blur(36px) saturate(200%) contrast(110%);
+  -webkit-backdrop-filter: blur(36px) saturate(200%);
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  box-shadow: 
+    0 24px 60px -8px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.22) !important;
+}
+
+/* Active tab capsule with illuminated background and crisp white typography */
+.glass-tab-capsule {
+  background: rgba(255, 255, 255, 0.16) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 2px 12px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.28) !important;
+}
+
+/* Center Highlighted Plus Button */
+.glass-add-button {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border: 1px solid rgba(255, 255, 255, 0.22) !important;
+  color: #ffffff !important;
+  box-shadow: 
+    0 4px 16px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.25) !important;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glass-add-button:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+  border-color: rgba(255, 255, 255, 0.38) !important;
+  box-shadow: 
+    0 8px 24px rgba(0, 0, 0, 0.45),
+    0 0 16px rgba(255, 255, 255, 0.2),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.4) !important;
+  transform: translateY(-2px) scale(1.06);
+}
+
+/* Glass input fields */
+.glass-input {
+  background: rgba(16, 16, 22, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.25),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.2s ease;
+}
+
+.glass-input:focus {
+  background: rgba(20, 20, 28, 0.8);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 
+    0 0 0 3px rgba(255, 255, 255, 0.08),
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+}
+
+
+

@@ -1,18 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useSettingsStore } from './store/useSettingsStore';
-import OmniSearch from './components/OmniSearch';
 import LibraryGrid from './components/LibraryGrid';
+import InsightsView from './components/InsightsView';
+import AddSearchView from './components/AddSearchView';
+import AccountView from './components/AccountView';
+import BottomNavBar from './components/BottomNavBar';
 import InteractiveBookModal from './components/InteractiveBookModal';
 import ManualBookModal from './components/ManualBookModal';
 import SettingsPanel from './components/SettingsPanel';
 import ProfileModal from './components/ProfileModal';
-import { BookOpen, Sparkles, Compass, RefreshCw, CheckCircle2, BookPlus, User } from 'lucide-react';
+import { Compass, RefreshCw, CheckCircle2, BookPlus } from 'lucide-react';
 import { getThemeClasses } from './lib/themeStyles';
 import { syncLibraryState } from './lib/bookSyncService';
 import { getActiveProfile } from './lib/profileService';
 import { APP_VERSION } from './lib/appConfig.js';
 
 export default function App() {
+  const [activeTab, setActiveTab] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (['home', 'insights', 'add', 'account'].includes(tabParam)) {
+        return tabParam;
+      }
+    } catch {}
+    return 'home';
+  });
   const [selectedBook, setSelectedBook] = useState(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [refreshNotice, setRefreshNotice] = useState(null);
@@ -26,7 +39,6 @@ export default function App() {
   useEffect(() => {
     const handleProfileSwitch = () => {
       setActiveProfile(getActiveProfile());
-      // Explicitly close any open book reader or editor from previous profile
       setSelectedBook(null);
       setEditingBook(null);
       setIsManualModalOpen(false);
@@ -49,6 +61,20 @@ export default function App() {
       window.removeEventListener('antigravity:profiles-updated', handleProfileUpdate);
       window.removeEventListener('antigravity:open-profile-modal', handleOpenModal);
     };
+  }, []);
+
+  // Keyboard shortcut listener (1: Home, 2: Insights, 3: Add, 4: Account)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
+      if (e.key === '1') setActiveTab('home');
+      else if (e.key === '2') setActiveTab('insights');
+      else if (e.key === '3') setActiveTab('add');
+      else if (e.key === '4') setActiveTab('account');
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
   const theme = useSettingsStore((state) => state.theme);
@@ -94,17 +120,27 @@ export default function App() {
 
   return (
     <div
-      className={`min-h-screen w-full transition-colors duration-300 ${fontFamily} ${themeStyles.root}`}
+      className={`min-h-screen w-full relative transition-colors duration-300 ${fontFamily} ${themeStyles.root}`}
     >
-      {/* Top Header / Branding with Refresh & Add Volume Options at Top Right */}
+      {/* Kimi AI Ambient Background Refraction Mesh */}
+      <div className="glass-ambient-glow">
+        <div className="glass-orb-1" />
+        <div className="glass-orb-2" />
+        <div className="glass-orb-3" />
+      </div>
+
+      {/* Top Header / Branding with Profile & Action Buttons */}
       <header
-        className={`border-b sticky top-0 z-30 transition-all backdrop-blur-md ${themeStyles.header}`}
+        className={`border-b sticky top-0 z-30 transition-all backdrop-blur-xl ${themeStyles.header}`}
       >
         <div className="max-w-6xl mx-auto px-4 sm:px-6 py-3.5 flex items-center justify-between">
           {/* Logo & Brand */}
-          <div className="flex items-center gap-3">
+          <div
+            onClick={() => setActiveTab('home')}
+            className="flex items-center gap-3 cursor-pointer select-none group"
+          >
             <div
-              className={`p-2 rounded-2xl shadow-sm ${themeStyles.buttonPrimary}`}
+              className={`p-2 rounded-2xl shadow-sm transition-transform group-hover:scale-105 ${themeStyles.buttonPrimary}`}
             >
               <Compass className="w-5 h-5 animate-pulse" />
             </div>
@@ -121,7 +157,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Top Right Action Controls: Refresh / Sync Button & Manual Book Addition & Profile */}
+          {/* Top Right Controls */}
           <div className="flex items-center gap-2 sm:gap-2.5">
             {refreshNotice && (
               <span className="flex items-center gap-1.5 text-xs text-emerald-500 font-medium animate-fade-in">
@@ -130,10 +166,12 @@ export default function App() {
               </span>
             )}
 
-            {/* Active Reader Profile Trigger */}
+            {/* Reader Profile Trigger (Switches to Account tab or opens modal) */}
             <button
-              onClick={() => setIsProfileModalOpen(true)}
-              className={`flex items-center gap-2 pl-1 pr-2.5 py-1 sm:pl-1.5 sm:pr-3.5 sm:py-1 rounded-full border text-xs font-medium transition-all shadow-sm hover:scale-105 active:scale-95 border-current border-opacity-20 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10`}
+              onClick={() => setActiveTab('account')}
+              className={`flex items-center gap-2 pl-1 pr-2.5 py-1 sm:pl-1.5 sm:pr-3.5 sm:py-1 rounded-full border text-xs font-medium transition-all shadow-sm hover:scale-105 active:scale-95 border-current border-opacity-20 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10 ${
+                activeTab === 'account' ? 'ring-2 ring-emerald-500/70' : ''
+              }`}
               title={`Switch reader profile (Active: ${activeProfile?.name || 'Reader'})`}
             >
               <div className="w-5 h-5 sm:w-6 sm:h-6 rounded-full overflow-hidden border border-emerald-500/80 shadow-xs shrink-0 bg-zinc-900">
@@ -148,16 +186,18 @@ export default function App() {
               </span>
             </button>
 
+            {/* Quick Add Custom Book Button */}
             <button
               onClick={() => handleOpenManualModal('')}
               className={`flex items-center gap-1.5 px-3 py-1.5 sm:px-3.5 sm:py-2 rounded-full border text-xs font-mono font-medium transition-all shadow-sm hover:scale-105 active:scale-95 ${themeStyles.badge} hover:brightness-110`}
-              title="Add custom book with metadata and resized cover"
+              title="Add custom volume manually"
             >
               <BookPlus className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">+ Add Book</span>
               <span className="sm:hidden">Add</span>
             </button>
 
+            {/* Refresh Sync Button */}
             <button
               onClick={handleManualRefresh}
               disabled={isRefreshing}
@@ -166,57 +206,82 @@ export default function App() {
                   ? 'opacity-70 pointer-events-none'
                   : 'hover:scale-105 active:scale-95'
               } border-current border-opacity-20 bg-black/5 dark:bg-white/5 hover:bg-black/10 dark:hover:bg-white/10`}
-              title="Sync & refresh library data from cloud and local storage"
+              title="Sync & refresh library data"
             >
               <RefreshCw
                 className={`w-3.5 h-3.5 ${isRefreshing ? `animate-spin ${themeStyles.accentText}` : 'opacity-70'}`}
               />
               <span className="hidden sm:inline">
-                {isRefreshing ? 'Syncing...' : 'Sync & Refresh'}
+                {isRefreshing ? 'Syncing...' : 'Sync'}
               </span>
-              <span className="sm:hidden">{isRefreshing ? '...' : 'Sync'}</span>
             </button>
           </div>
         </div>
       </header>
 
-      {/* Main Centered Content Layout */}
-      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-12">
-        {/* Hero & OmniSearch Section */}
-        <section className="text-center space-y-5">
-          <div className="space-y-2">
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-              Curate your intellectual universe.
-            </h2>
-            <p className="text-xs sm:text-sm opacity-60 max-w-lg mx-auto">
-              Search the global catalog, catalog volumes autonomously, and flip through your physical
-              reading log.
-            </p>
-          </div>
-
-          {/* OmniSearch with debounced hybrid search and instant suggestions */}
-          <div className="pt-2">
-            <OmniSearch
-              onOpenManualModal={handleOpenManualModal}
-              onBookAdded={(newBook) => {
-                // Book is immediately rendered via optimistic sync
-              }}
+      {/* Main Content Area (With generous bottom padding for the floating dock) */}
+      <main className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-10 pb-28 sm:pb-36 relative z-10 min-h-[calc(100vh-140px)]">
+        {/* Tab 1: Home (All books in library with shelf filtering & search) */}
+        {activeTab === 'home' && (
+          <section className="animate-fade-in">
+            <LibraryGrid
+              onSelectBook={(book) => setSelectedBook(book)}
+              selectedBookId={selectedBook?.id}
+              onOpenManualModal={() => handleOpenManualModal('')}
+              onEditBook={handleEditBook}
+              onOpenAddTab={() => setActiveTab('add')}
             />
-          </div>
-        </section>
+          </section>
+        )}
 
-        {/* Library Grid Section */}
-        <section className="pt-4">
-          <LibraryGrid
-            onSelectBook={(book) => setSelectedBook(book)}
-            selectedBookId={selectedBook?.id}
-            onOpenManualModal={() => handleOpenManualModal('')}
-            onEditBook={handleEditBook}
-          />
-        </section>
+        {/* Tab 2: Insights & Reading Activity */}
+        {activeTab === 'insights' && (
+          <section className="animate-fade-in">
+            <InsightsView
+              onSelectBook={(book) => setSelectedBook(book)}
+              onOpenAddTab={() => setActiveTab('add')}
+            />
+          </section>
+        )}
+
+        {/* Tab 3: Search & Add Books (+) */}
+        {activeTab === 'add' && (
+          <section className="animate-fade-in">
+            <AddSearchView
+              onOpenManualModal={handleOpenManualModal}
+              onBookAdded={() => {
+                // Optimistic sync updates all components automatically
+              }}
+              onGoHome={() => setActiveTab('home')}
+            />
+          </section>
+        )}
+
+        {/* Tab 4: Account & Profile Switching */}
+        {activeTab === 'account' && (
+          <section className="animate-fade-in">
+            <AccountView
+              onOpenFullProfileModal={() => setIsProfileModalOpen(true)}
+            />
+          </section>
+        )}
       </main>
 
-      {/* Interactive FlipBook Modal */}
+      {/* Floating Kimi AI-Style Bottom Navigation Dock */}
+      <BottomNavBar
+        activeTab={activeTab}
+        onTabChange={(tabId) => {
+          setActiveTab(tabId);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          try {
+            const url = new URL(window.location.href);
+            url.searchParams.set('tab', tabId);
+            window.history.replaceState({}, '', url.toString());
+          } catch {}
+        }}
+      />
+
+      {/* Interactive 3D FlipBook Modal */}
       {selectedBook && (
         <InteractiveBookModal
           book={selectedBook}
@@ -236,8 +301,8 @@ export default function App() {
         }}
         initialTitle={manualInitialTitle}
         bookToEdit={editingBook}
-        onBookAdded={(newBook) => {
-          // Window event is triggered by fastAddBook to update all components immediately
+        onBookAdded={() => {
+          // Handled via window event
         }}
         onBookUpdated={(updated) => {
           if (selectedBook && selectedBook.id === updated.id) {
@@ -254,11 +319,6 @@ export default function App() {
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
       />
-
-      {/* Footer */}
-      <footer className="border-t border-current border-opacity-10 py-8 mt-20 text-center text-xs opacity-40 font-mono">
-        Omnidex • 7 Atmospheres • Instant Optimistic Sync • Supabase • Zustand • PageFlip
-      </footer>
     </div>
   );
 }

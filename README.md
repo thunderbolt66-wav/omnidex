@@ -18,15 +18,26 @@
 
 ## 🖼️ Interface Preview
 
-| Desktop Reading Sanctuary & OmniSearch | Mobile Curated Recommendations |
-| :---: | :---: |
-| ![Omnidex Desktop Dashboard](screenshots/omnidex-dashboard.png) | ![Omnidex Mobile View](screenshots/omnidex-mobile.png) |
+| Crystalline Glass Desktop & Floating Dock | Reading Sanctum Insights & Analytics | Mobile Responsive Experience |
+| :---: | :---: | :---: |
+| ![Omnidex Glass Dashboard](screenshots/pc-home-glass-v2.png) | ![Reading Insights](screenshots/pc-tab-insights.png) | ![Omnidex Mobile Glass](screenshots/mobile-home-glass-v2.png) |
 
 ---
 
 ## 💡 What Omnidex Offers
 
 **Omnidex** is an autonomous personal reading sanctum and intellectual catalog designed for readers, researchers, and book collectors who value **privacy, aesthetic typography, and zero-friction curation**.
+
+### 📱 Kimi AI-Grade Crystalline Glassmorphism & Floating Dock
+Experience ultra-modern mobile and desktop ergonomics inspired by the highest-tier glass interfaces:
+- **Floating Crystalline Navigation Dock**: Ergonomic bottom pill dock featuring deep frosted blur (`36px`), specular edge reflection, and animated capsule transitions.
+- **Ambient Luminous Refraction**: Dynamic multi-color ambient diffusion mesh that refracts naturally through glass panels.
+- **4 Dedicated Navigation Sanctums**:
+  1. 🏠 **Home**: Complete shelf management with category filtering (*All, Currently Reading, Finished, Want to Read*), in-library real-time search, and sorting.
+  2. ⊞ **Insights**: Reading telemetry, active streak counter, annual reading target with interactive pace adjuster, and top intellectual domains.
+  3. ➕ **Add & Search**: Centered action tab combining multi-provider global catalog search with one-click manual custom book entry.
+  4. 👤 **Account & Profiles**: Instant reader persona switching, PIN security verification, local JSON backup/restore, and 36-theme atmosphere selector.
+
 
 Most modern reading apps require sign-ups, sell your reading telemetry, lock your notes into proprietary silos, or clutter your reading space with intrusive ads. Omnidex replaces that fragmented experience with a single, elegant, and 100% client-side bookshelf:
 
