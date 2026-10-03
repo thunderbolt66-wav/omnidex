@@ -9,7 +9,6 @@ import BottomNavBar from './components/BottomNavBar';
 import InteractiveBookModal from './components/InteractiveBookModal';
 import ManualBookModal from './components/ManualBookModal';
 import ProfileModal from './components/ProfileModal';
-import AdminSentinelModal from './components/AdminSentinelModal';
 import { Compass, RefreshCw, CheckCircle2, BookPlus } from 'lucide-react';
 import { getThemeClasses } from './lib/themeStyles';
 import { syncLibraryState } from './lib/bookSyncService';
@@ -37,14 +36,6 @@ export default function App() {
   const [editingBook, setEditingBook] = useState(null);
   const [activeProfile, setActiveProfile] = useState(() => getActiveProfile());
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
-  const [isAdminSentinelOpen, setIsAdminSentinelOpen] = useState(() => {
-    try {
-      return window.location.search.includes('admin=true') || window.location.hash === '#admin';
-    } catch {
-      return false;
-    }
-  });
-  const [versionTapCount, setVersionTapCount] = useState(0);
 
   // Sync active profile changes
   useEffect(() => {
@@ -92,35 +83,9 @@ export default function App() {
     trackPageView({ tab: activeTab, theme: theme });
   }, [activeTab, theme]);
 
-  // 5-tap version badge secret trigger
-  const handleVersionTap = (e) => {
-    e.stopPropagation();
-    setVersionTapCount((prev) => {
-      const next = prev + 1;
-      if (next >= 5) {
-        setIsAdminSentinelOpen(true);
-        return 0;
-      }
-      return next;
-    });
-  };
-
-  useEffect(() => {
-    if (versionTapCount > 0) {
-      const timer = setTimeout(() => setVersionTapCount(0), 2500);
-      return () => clearTimeout(timer);
-    }
-  }, [versionTapCount]);
-
-  // Keyboard shortcut listener (1: Home, 2: Insights, 3: Add, 4: Settings, 5: Account, Ctrl+Shift+A: Sentinel)
+  // Keyboard shortcut listener (1: Home, 2: Insights, 3: Add, 4: Settings, 5: Account)
   useEffect(() => {
     const handleKeyDown = (e) => {
-      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'a') {
-        e.preventDefault();
-        setIsAdminSentinelOpen((prev) => !prev);
-        return;
-      }
-
       if (['INPUT', 'TEXTAREA', 'SELECT'].includes(e.target.tagName)) return;
       if (e.key === '1') setActiveTab('home');
       else if (e.key === '2') setActiveTab('insights');
@@ -199,11 +164,7 @@ export default function App() {
             <div>
               <h1 className="text-base sm:text-lg font-bold tracking-tight uppercase flex items-center gap-2">
                 <span>Omnidex</span>
-                <span
-                  onClick={handleVersionTap}
-                  title="Omnidex System Version"
-                  className="text-[10px] font-mono font-medium opacity-70 px-1.5 py-0.5 rounded border border-current border-opacity-25 uppercase tracking-wide cursor-pointer hover:opacity-100 transition-opacity select-none"
-                >
+                <span className="text-[10px] font-mono font-medium opacity-70 px-1.5 py-0.5 rounded border border-current border-opacity-25 uppercase tracking-wide">
                   {APP_VERSION}
                 </span>
               </h1>
@@ -378,12 +339,6 @@ export default function App() {
       <ProfileModal
         isOpen={isProfileModalOpen}
         onClose={() => setIsProfileModalOpen(false)}
-      />
-
-      {/* Owner-Only Sentinel Admin Telemetry & IP Command */}
-      <AdminSentinelModal
-        isOpen={isAdminSentinelOpen}
-        onClose={() => setIsAdminSentinelOpen(false)}
       />
     </div>
   );

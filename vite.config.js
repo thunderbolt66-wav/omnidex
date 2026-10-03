@@ -1,3 +1,4 @@
+import { resolve } from 'path';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 
@@ -12,6 +13,12 @@ function localTelemetryPlugin() {
     configureServer(server) {
       server.middlewares.use((req, res, next) => {
         const url = req.url?.split('?')[0];
+
+        // Rewrite /admin to /admin.html for dev server
+        if (url === '/admin' || url === '/admin/') {
+          req.url = '/admin.html';
+          return next();
+        }
 
         // Track visit endpoint
         if (url === '/api/track-visit' && req.method === 'POST') {
@@ -126,6 +133,14 @@ function localTelemetryPlugin() {
 export default defineConfig({
   base: './',
   plugins: [react(), localTelemetryPlugin()],
+  build: {
+    rollupOptions: {
+      input: {
+        main: resolve(import.meta.dirname, 'index.html'),
+        admin: resolve(import.meta.dirname, 'admin.html'),
+      },
+    },
+  },
   server: {
     headers: {
       'X-Frame-Options': 'SAMEORIGIN',
