@@ -62,9 +62,9 @@ export default function AddSearchView({ onOpenManualModal, onBookAdded, onGoHome
       )}
 
       {/* Manual Entry Action Card (Quick + Add Book) */}
-      <div className="max-w-2xl mx-auto glass-card p-5 sm:p-6 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4 border-dashed border-white/20">
+      <div className="max-w-2xl mx-auto glass-card p-5 sm:p-6 rounded-3xl flex flex-col sm:flex-row items-center justify-between gap-4 border-dashed border-current/25">
         <div className="flex items-center gap-3.5 text-left">
-          <div className="p-3 rounded-2xl bg-white/10 text-white shrink-0">
+          <div className="p-3 rounded-2xl bg-current/10 text-current shrink-0">
             <BookPlus className="w-6 h-6" />
           </div>
           <div>
@@ -77,7 +77,7 @@ export default function AddSearchView({ onOpenManualModal, onBookAdded, onGoHome
 
         <button
           onClick={() => onOpenManualModal('')}
-          className="w-full sm:w-auto px-5 py-2.5 rounded-full font-semibold text-xs transition-all shadow-md active:scale-95 glass-add-button text-white whitespace-nowrap"
+          className={`w-full sm:w-auto px-5 py-2.5 rounded-full font-semibold text-xs transition-all shadow-md active:scale-95 whitespace-nowrap ${themeStyles.buttonPrimary}`}
         >
           + Add Custom Book
         </button>

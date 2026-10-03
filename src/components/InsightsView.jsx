@@ -160,7 +160,7 @@ export default function InsightsView({ onSelectBook, onOpenAddTab }) {
       <div className="glass-card p-5 sm:p-6 rounded-3xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-white/10 text-white">
+            <div className="p-2.5 rounded-2xl bg-current/10 text-current">
               <Target className="w-5 h-5" />
             </div>
             <div>
@@ -173,14 +173,14 @@ export default function InsightsView({ onSelectBook, onOpenAddTab }) {
             <span className="text-xs opacity-60 font-mono">Goal:</span>
             <button
               onClick={() => handleUpdateGoal(-5)}
-              className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-sm font-bold flex items-center justify-center transition-all active:scale-95"
+              className="w-8 h-8 rounded-xl bg-current/10 hover:bg-current/20 text-sm font-bold flex items-center justify-center transition-all active:scale-95 text-current"
             >
               -
             </button>
             <span className="text-sm font-bold font-mono px-2">{readingGoal} books</span>
             <button
               onClick={() => handleUpdateGoal(5)}
-              className="w-8 h-8 rounded-xl bg-white/10 hover:bg-white/20 text-sm font-bold flex items-center justify-center transition-all active:scale-95"
+              className="w-8 h-8 rounded-xl bg-current/10 hover:bg-current/20 text-sm font-bold flex items-center justify-center transition-all active:scale-95 text-current"
             >
               +
             </button>
@@ -193,9 +193,9 @@ export default function InsightsView({ onSelectBook, onOpenAddTab }) {
             <span className="opacity-70">
               {completedBooks.length} of {readingGoal} books completed
             </span>
-            <span className="font-bold text-emerald-400">{goalProgress}%</span>
+            <span className="font-bold text-emerald-500 dark:text-emerald-400">{goalProgress}%</span>
           </div>
-          <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden p-0.5 border border-white/10">
+          <div className="h-3 w-full bg-current/10 rounded-full overflow-hidden p-0.5 border border-current/15">
             <div
               className="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-700 shadow-sm"
               style={{ width: `${goalProgress}%` }}
@@ -220,9 +220,9 @@ export default function InsightsView({ onSelectBook, onOpenAddTab }) {
                 <span className="opacity-80">Currently Reading</span>
                 <span className="font-mono font-medium">{readingBooks.length} volumes</span>
               </div>
-              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+              <div className="h-2 w-full bg-current/10 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-cyan-400 rounded-full transition-all duration-500"
+                  className="h-full bg-cyan-500 dark:bg-cyan-400 rounded-full transition-all duration-500"
                   style={{ width: `${totalBooks ? (readingBooks.length / totalBooks) * 100 : 0}%` }}
                 />
               </div>
@@ -234,9 +234,9 @@ export default function InsightsView({ onSelectBook, onOpenAddTab }) {
                 <span className="opacity-80">Completed</span>
                 <span className="font-mono font-medium">{completedBooks.length} volumes</span>
               </div>
-              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+              <div className="h-2 w-full bg-current/10 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-emerald-400 rounded-full transition-all duration-500"
+                  className="h-full bg-emerald-500 dark:bg-emerald-400 rounded-full transition-all duration-500"
                   style={{ width: `${totalBooks ? (completedBooks.length / totalBooks) * 100 : 0}%` }}
                 />
               </div>
@@ -248,9 +248,9 @@ export default function InsightsView({ onSelectBook, onOpenAddTab }) {
                 <span className="opacity-80">Want to Read</span>
                 <span className="font-mono font-medium">{unreadBooks.length} volumes</span>
               </div>
-              <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden">
+              <div className="h-2 w-full bg-current/10 rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-amber-400 rounded-full transition-all duration-500"
+                  className="h-full bg-amber-500 dark:bg-amber-400 rounded-full transition-all duration-500"
                   style={{ width: `${totalBooks ? (unreadBooks.length / totalBooks) * 100 : 0}%` }}
                 />
               </div>
@@ -270,10 +270,10 @@ export default function InsightsView({ onSelectBook, onOpenAddTab }) {
               {sortedGenres.map(([genre, count]) => (
                 <div
                   key={genre}
-                  className="flex items-center justify-between p-2.5 rounded-xl bg-white/5 hover:bg-white/10 transition-colors"
+                  className="flex items-center justify-between p-2.5 rounded-xl bg-current/5 hover:bg-current/10 transition-colors"
                 >
                   <span className="text-xs font-medium truncate max-w-[200px]">{genre}</span>
-                  <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-white/10 opacity-70">
+                  <span className="text-xs font-mono px-2 py-0.5 rounded-md bg-current/10 opacity-70">
                     {count} {count === 1 ? 'book' : 'books'}
                   </span>
                 </div>

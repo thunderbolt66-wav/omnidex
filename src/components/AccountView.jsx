@@ -160,7 +160,7 @@ export default function AccountView({ onOpenFullProfileModal }) {
         {onOpenFullProfileModal && (
           <button
             onClick={onOpenFullProfileModal}
-            className="flex items-center gap-2 px-4 py-2 rounded-full glass-card hover:bg-white/10 text-xs font-semibold transition-all active:scale-95 w-fit"
+            className="flex items-center gap-2 px-4 py-2 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/10 text-xs font-semibold transition-all active:scale-95 w-fit"
           >
             <Settings2 className="w-4 h-4" />
             <span>Advanced Manager</span>
@@ -169,8 +169,8 @@ export default function AccountView({ onOpenFullProfileModal }) {
       </div>
 
       {backupNotice && (
-        <div className="glass-card p-3.5 rounded-2xl border-emerald-500/30 bg-emerald-950/20 text-emerald-300 text-xs font-medium flex items-center gap-2 animate-fade-in">
-          <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+        <div className="glass-card p-3.5 rounded-2xl border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 dark:bg-emerald-950/30 text-xs font-medium flex items-center gap-2 animate-fade-in">
+          <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
           <span>{backupNotice}</span>
         </div>
       )}
@@ -188,11 +188,11 @@ export default function AccountView({ onOpenFullProfileModal }) {
             </div>
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
+                <span className="text-xs font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30">
                   Active Persona
                 </span>
                 {activeProfile?.hasPin && (
-                  <span className="text-[11px] font-mono text-amber-400 flex items-center gap-1">
+                  <span className="text-[11px] font-mono text-amber-500 dark:text-amber-400 flex items-center gap-1">
                     <Lock className="w-3 h-3" /> PIN Locked
                   </span>
                 )}
@@ -207,7 +207,7 @@ export default function AccountView({ onOpenFullProfileModal }) {
           <div className="flex items-center gap-2">
             <button
               onClick={onOpenFullProfileModal}
-              className="px-4 py-2 rounded-full glass-card hover:bg-white/10 text-xs font-semibold transition-all active:scale-95"
+              className="px-4 py-2 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/10 text-xs font-semibold transition-all active:scale-95"
             >
               Edit Profile
             </button>
@@ -233,12 +233,12 @@ export default function AccountView({ onOpenFullProfileModal }) {
                 onClick={() => handleSelectProfile(p)}
                 className={`glass-card p-4 rounded-2xl cursor-pointer transition-all duration-200 flex items-center justify-between gap-3 ${
                   isCurrent
-                    ? 'ring-2 ring-emerald-500/70 border-emerald-500/40 bg-white/10'
+                    ? 'ring-2 ring-emerald-500/70 border-emerald-500/40 bg-emerald-500/10 dark:bg-white/10'
                     : 'hover:scale-[1.02] active:scale-[0.98]'
                 }`}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-11 h-11 rounded-xl overflow-hidden border border-white/15 shrink-0 bg-zinc-900">
+                  <div className="w-11 h-11 rounded-xl overflow-hidden border border-current/15 shrink-0 bg-zinc-900">
                     <img
                       src={resolveAvatarUrl(p.avatarUrl || p.avatar)}
                       alt={p.name}
@@ -248,7 +248,7 @@ export default function AccountView({ onOpenFullProfileModal }) {
                   <div className="min-w-0">
                     <div className="text-sm font-semibold truncate flex items-center gap-1.5">
                       <span>{p.name}</span>
-                      {p.hasPin && <Lock className="w-3 h-3 text-amber-400 shrink-0" />}
+                      {p.hasPin && <Lock className="w-3 h-3 text-amber-500 dark:text-amber-400 shrink-0" />}
                     </div>
                     <div className="text-[11px] opacity-50 truncate">
                       {isCurrent ? 'Currently Active' : 'Tap to switch'}
@@ -270,7 +270,7 @@ export default function AccountView({ onOpenFullProfileModal }) {
           {/* Create New Profile Button */}
           <button
             onClick={onOpenFullProfileModal}
-            className="glass-card p-4 rounded-2xl border-dashed border-white/20 hover:border-white/40 flex items-center justify-center gap-2 text-xs font-semibold opacity-70 hover:opacity-100 transition-all active:scale-95"
+            className="glass-card p-4 rounded-2xl border-dashed border-current/25 hover:border-current/50 flex items-center justify-center gap-2 text-xs font-semibold opacity-70 hover:opacity-100 transition-all active:scale-95 min-h-[76px]"
           >
             <Plus className="w-4 h-4" />
             <span>Create New Persona</span>
@@ -345,17 +345,17 @@ export default function AccountView({ onOpenFullProfileModal }) {
         <div className="flex flex-wrap gap-3 pt-2">
           <button
             onClick={handleExportBackup}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-card hover:bg-white/10 text-xs font-medium transition-all active:scale-95"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/10 text-xs font-medium transition-all active:scale-95 border border-current/10"
           >
-            <Download className="w-3.5 h-3.5 text-cyan-400" />
+            <Download className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
             <span>Export JSON Archive</span>
           </button>
 
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-card hover:bg-white/10 text-xs font-medium transition-all active:scale-95"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/10 text-xs font-medium transition-all active:scale-95 border border-current/10"
           >
-            <Upload className="w-3.5 h-3.5 text-amber-400" />
+            <Upload className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
             <span>Restore From Backup</span>
           </button>
           <input
@@ -380,7 +380,7 @@ export default function AccountView({ onOpenFullProfileModal }) {
               </p>
             </div>
           </div>
-          <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-white/10 opacity-70">
+          <span className="text-xs font-mono uppercase px-2.5 py-0.5 rounded-full bg-current/10 opacity-80">
             {theme}
           </span>
         </div>
@@ -394,8 +394,8 @@ export default function AccountView({ onOpenFullProfileModal }) {
                 onClick={() => setTheme(t.id)}
                 className={`p-2.5 rounded-xl border text-left text-xs transition-all flex flex-col justify-between h-20 ${
                   isSelected
-                    ? 'ring-2 ring-white/60 border-white/40 font-bold bg-white/10'
-                    : 'border-white/10 hover:border-white/20 opacity-70 hover:opacity-100 bg-white/5'
+                    ? 'ring-2 ring-current border-current font-bold bg-current/15 shadow-xs'
+                    : 'border-current/15 hover:border-current/30 opacity-75 hover:opacity-100 bg-current/5'
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
@@ -403,7 +403,7 @@ export default function AccountView({ onOpenFullProfileModal }) {
                     className="w-3.5 h-3.5 rounded-full border border-black/20 shrink-0"
                     style={{ backgroundColor: t.previewAccent || '#fff' }}
                   />
-                  {isSelected && <Check className="w-3 h-3 text-emerald-400" />}
+                  {isSelected && <Check className="w-3 h-3 text-emerald-500 dark:text-emerald-400" />}
                 </div>
                 <div className="truncate font-medium text-[11px]">{t.name}</div>
               </button>

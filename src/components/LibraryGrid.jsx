@@ -207,8 +207,8 @@ export default function LibraryGrid({
           onClick={() => setShelfFilter('all')}
           className={`px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap flex items-center gap-1.5 font-medium ${
             shelfFilter === 'all'
-              ? 'glass-tab-capsule font-bold text-white shadow-sm'
-              : 'opacity-60 hover:opacity-100 hover:bg-white/5'
+              ? 'font-bold shadow-xs bg-current/15 text-current border border-current/30'
+              : 'opacity-60 hover:opacity-100 hover:bg-current/10'
           }`}
         >
           <Layers className="w-3.5 h-3.5" />
@@ -220,11 +220,11 @@ export default function LibraryGrid({
           onClick={() => setShelfFilter('reading')}
           className={`px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap flex items-center gap-1.5 font-medium ${
             shelfFilter === 'reading'
-              ? 'glass-tab-capsule font-bold text-white shadow-sm'
-              : 'opacity-60 hover:opacity-100 hover:bg-white/5'
+              ? 'font-bold shadow-xs bg-current/15 text-current border border-current/30'
+              : 'opacity-60 hover:opacity-100 hover:bg-current/10'
           }`}
         >
-          <Clock className="w-3.5 h-3.5 text-cyan-400" />
+          <Clock className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
           <span>Currently Reading</span>
           <span className="text-[10px] font-mono opacity-60">({readingCount})</span>
         </button>
@@ -233,11 +233,11 @@ export default function LibraryGrid({
           onClick={() => setShelfFilter('completed')}
           className={`px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap flex items-center gap-1.5 font-medium ${
             shelfFilter === 'completed'
-              ? 'glass-tab-capsule font-bold text-white shadow-sm'
-              : 'opacity-60 hover:opacity-100 hover:bg-white/5'
+              ? 'font-bold shadow-xs bg-current/15 text-current border border-current/30'
+              : 'opacity-60 hover:opacity-100 hover:bg-current/10'
           }`}
         >
-          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+          <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />
           <span>Finished</span>
           <span className="text-[10px] font-mono opacity-60">({completedCount})</span>
         </button>
@@ -246,11 +246,11 @@ export default function LibraryGrid({
           onClick={() => setShelfFilter('unread')}
           className={`px-3.5 py-1.5 rounded-full transition-all whitespace-nowrap flex items-center gap-1.5 font-medium ${
             shelfFilter === 'unread'
-              ? 'glass-tab-capsule font-bold text-white shadow-sm'
-              : 'opacity-60 hover:opacity-100 hover:bg-white/5'
+              ? 'font-bold shadow-xs bg-current/15 text-current border border-current/30'
+              : 'opacity-60 hover:opacity-100 hover:bg-current/10'
           }`}
         >
-          <Bookmark className="w-3.5 h-3.5 text-amber-400" />
+          <Bookmark className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
           <span>Want to Read</span>
           <span className="text-[10px] font-mono opacity-60">({unreadCount})</span>
         </button>
@@ -258,8 +258,8 @@ export default function LibraryGrid({
 
       {/* Book Grid */}
       {filteredBooks.length === 0 ? (
-        <div className="text-center py-20 rounded-3xl glass-card border-dashed border-white/20 px-6 space-y-4">
-          <Sparkles className="w-10 h-10 mx-auto opacity-40 animate-pulse text-amber-400" />
+        <div className="text-center py-20 rounded-3xl glass-card border-dashed border-current/25 px-6 space-y-4">
+          <Sparkles className="w-10 h-10 mx-auto opacity-40 animate-pulse text-amber-500 dark:text-amber-400" />
           <div className="space-y-1">
             <h3 className="text-base font-bold">
               {books.length === 0 ? 'Your Sanctuary is Empty' : 'No volumes match your filter'}
@@ -275,7 +275,7 @@ export default function LibraryGrid({
             {onOpenAddTab && (
               <button
                 onClick={onOpenAddTab}
-                className="px-4 py-2 rounded-full font-semibold text-xs transition-all shadow-md active:scale-95 glass-add-button text-white"
+                className={`px-4 py-2 rounded-full font-semibold text-xs transition-all shadow-md active:scale-95 ${themeStyles.buttonPrimary}`}
               >
                 + Search & Add Books
               </button>
@@ -283,7 +283,7 @@ export default function LibraryGrid({
             {onOpenManualModal && (
               <button
                 onClick={() => onOpenManualModal('')}
-                className="px-4 py-2 rounded-full glass-card hover:bg-white/10 text-xs font-semibold"
+                className="px-4 py-2 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/10 text-xs font-semibold border border-current/10"
               >
                 + Manual Entry
               </button>

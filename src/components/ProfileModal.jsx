@@ -393,7 +393,7 @@ export default function ProfileModal({ isOpen, onClose }) {
       onClick={onClose}
     >
       <div
-        className={`w-full max-w-2xl rounded-3xl border shadow-2xl overflow-hidden transition-all duration-300 max-h-[92vh] flex flex-col ${themeStyles.card}`}
+        className={`w-full max-w-2xl rounded-3xl border shadow-2xl overflow-hidden transition-all duration-300 max-h-[92vh] flex flex-col ${themeStyles.modal}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Bar */}

@@ -171,8 +171,8 @@ export default function SettingsView() {
         </div>
 
         {backupNotice && (
-          <div className="glass-card p-3 rounded-2xl border-emerald-500/30 bg-emerald-950/20 text-emerald-300 text-xs font-medium flex items-center gap-2 animate-fade-in">
-            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+          <div className="glass-card p-3 rounded-2xl border-emerald-500/30 bg-emerald-500/10 text-emerald-800 dark:text-emerald-300 dark:bg-emerald-950/30 text-xs font-medium flex items-center gap-2 animate-fade-in">
+            <ShieldCheck className="w-4 h-4 text-emerald-500 shrink-0" />
             <span>{backupNotice}</span>
           </div>
         )}
@@ -182,7 +182,7 @@ export default function SettingsView() {
       <div className="glass-card p-5 sm:p-6 rounded-3xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-white/10 text-white">
+            <div className="p-2.5 rounded-2xl bg-current/10 text-current">
               <Sun className="w-5 h-5" />
             </div>
             <div>
@@ -201,8 +201,8 @@ export default function SettingsView() {
                 onClick={() => setThemeCategory(cat)}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
                   themeCategory === cat
-                    ? 'glass-tab-capsule font-bold text-white shadow-sm'
-                    : 'opacity-60 hover:opacity-100 hover:bg-white/5'
+                    ? 'font-bold shadow-xs bg-current/15 text-current border border-current/30'
+                    : 'opacity-60 hover:opacity-100 hover:bg-current/10'
                 }`}
               >
                 {cat}
@@ -221,8 +221,8 @@ export default function SettingsView() {
                 onClick={() => handleSelectTheme(t.id)}
                 className={`p-3 rounded-2xl border text-left text-xs transition-all flex flex-col justify-between h-24 group ${
                   isSelected
-                    ? 'ring-2 ring-current border-current font-bold bg-white/10'
-                    : 'border-current border-opacity-15 hover:border-opacity-35 opacity-75 hover:opacity-100 bg-white/5'
+                    ? 'ring-2 ring-current border-current font-bold bg-current/15 shadow-xs'
+                    : 'border-current/15 hover:border-current/30 opacity-75 hover:opacity-100 bg-current/5'
                 }`}
               >
                 <div className="flex items-center justify-between w-full">
@@ -230,7 +230,7 @@ export default function SettingsView() {
                     className="w-4 h-4 rounded-full border border-black/20 shadow-xs shrink-0"
                     style={{ backgroundColor: t.previewAccent || '#fff' }}
                   />
-                  {isSelected && <Check className="w-3.5 h-3.5 text-emerald-400" />}
+                  {isSelected && <Check className="w-3.5 h-3.5 text-emerald-500 dark:text-emerald-400" />}
                 </div>
 
                 <div>
@@ -247,7 +247,7 @@ export default function SettingsView() {
       <div className="glass-card p-5 sm:p-6 rounded-3xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-white/10 text-white">
+            <div className="p-2.5 rounded-2xl bg-current/10 text-current">
               <Type className="w-5 h-5" />
             </div>
             <div>
@@ -266,8 +266,8 @@ export default function SettingsView() {
                 onClick={() => setFontCategory(cat)}
                 className={`px-3 py-1 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
                   fontCategory === cat
-                    ? 'glass-tab-capsule font-bold text-white shadow-sm'
-                    : 'opacity-60 hover:opacity-100 hover:bg-white/5'
+                    ? 'font-bold shadow-xs bg-current/15 text-current border border-current/30'
+                    : 'opacity-60 hover:opacity-100 hover:bg-current/10'
                 }`}
               >
                 {cat}
@@ -286,13 +286,13 @@ export default function SettingsView() {
                 onClick={() => handleSelectFont(f.id)}
                 className={`p-3.5 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between h-24 ${
                   isSelected
-                    ? 'ring-2 ring-current border-current font-bold bg-white/10'
-                    : 'border-current border-opacity-15 hover:border-opacity-35 opacity-75 hover:opacity-100 bg-white/5'
+                    ? 'ring-2 ring-current border-current font-bold bg-current/15 shadow-xs'
+                    : 'border-current/15 hover:border-current/30 opacity-75 hover:opacity-100 bg-current/5'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold">{f.name}</span>
-                  <span className="text-[10px] font-mono opacity-50 px-1.5 py-0.5 rounded bg-white/10">
+                  <span className="text-[10px] font-mono opacity-60 px-1.5 py-0.5 rounded bg-current/10">
                     {f.category}
                   </span>
                 </div>
@@ -308,7 +308,7 @@ export default function SettingsView() {
       {/* 3. Reading Motion & Accessibility */}
       <div className="glass-card p-5 sm:p-6 rounded-3xl flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-white/10 text-white">
+          <div className="p-2.5 rounded-2xl bg-current/10 text-current">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
@@ -338,7 +338,7 @@ export default function SettingsView() {
       <div className="glass-card p-5 sm:p-6 rounded-3xl space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-white/10 text-white">
+            <div className="p-2.5 rounded-2xl bg-current/10 text-current">
               <History className="w-5 h-5" />
             </div>
             <div>
@@ -351,21 +351,21 @@ export default function SettingsView() {
 
           <div className="flex items-center gap-2">
             {historyNotice && (
-              <span className="text-xs text-rose-400 font-medium animate-fade-in mr-2">
+              <span className="text-xs text-rose-500 dark:text-rose-400 font-medium animate-fade-in mr-2">
                 {historyNotice}
               </span>
             )}
 
             <button
               onClick={() => setIsHistoryModalOpen(true)}
-              className="px-3.5 py-1.5 rounded-full glass-card hover:bg-white/10 text-xs font-semibold"
+              className="px-3.5 py-1.5 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/10 text-xs font-semibold border border-current/10"
             >
               Inspect Vault
             </button>
 
             <button
               onClick={handleClearHistory}
-              className="px-3.5 py-1.5 rounded-full bg-rose-500/15 hover:bg-rose-500/25 text-rose-400 border border-rose-500/30 text-xs font-semibold"
+              className="px-3.5 py-1.5 rounded-full bg-rose-500/15 hover:bg-rose-500/25 text-rose-600 dark:text-rose-400 border border-rose-500/30 text-xs font-semibold"
             >
               Wipe History
             </button>
@@ -376,7 +376,7 @@ export default function SettingsView() {
       {/* 5. Multi-Profile Archive Backup & Local Sovereignty */}
       <div className="glass-card p-5 sm:p-6 rounded-3xl space-y-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-white/10 text-white">
+          <div className="p-2.5 rounded-2xl bg-current/10 text-current">
             <Database className="w-5 h-5" />
           </div>
           <div>
@@ -390,17 +390,17 @@ export default function SettingsView() {
         <div className="flex flex-wrap gap-3 pt-2">
           <button
             onClick={handleExportAllProfiles}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-card hover:bg-white/10 text-xs font-semibold transition-all active:scale-95"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/10 text-xs font-semibold transition-all active:scale-95 border border-current/10"
           >
-            <Download className="w-3.5 h-3.5 text-cyan-400" />
+            <Download className="w-3.5 h-3.5 text-cyan-500 dark:text-cyan-400" />
             <span>Export Complete Archive</span>
           </button>
 
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-card hover:bg-white/10 text-xs font-semibold transition-all active:scale-95"
+            className="flex items-center gap-2 px-4 py-2.5 rounded-full glass-card hover:bg-black/5 dark:hover:bg-white/10 text-xs font-semibold transition-all active:scale-95 border border-current/10"
           >
-            <Upload className="w-3.5 h-3.5 text-amber-400" />
+            <Upload className="w-3.5 h-3.5 text-amber-500 dark:text-amber-400" />
             <span>Restore From File</span>
           </button>
           <input
