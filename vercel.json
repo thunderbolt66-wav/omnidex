@@ -4,6 +4,14 @@
   "cleanUrls": true,
   "rewrites": [
     {
+      "source": "/api/track-visit",
+      "destination": "/api/telemetry.js"
+    },
+    {
+      "source": "/api/admin-telemetry",
+      "destination": "/api/telemetry.js"
+    },
+    {
       "source": "/admin",
       "destination": "/admin.html"
     },
