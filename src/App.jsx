@@ -13,7 +13,7 @@ import { Compass, RefreshCw, CheckCircle2, BookPlus } from 'lucide-react';
 import { getThemeClasses } from './lib/themeStyles';
 import { syncLibraryState } from './lib/bookSyncService';
 import { getActiveProfile } from './lib/profileService';
-import { trackPageView } from './lib/telemetryService';
+import { trackPageView } from './lib/visitorTracker';
 import { APP_VERSION } from './lib/appConfig.js';
 
 export default function App() {

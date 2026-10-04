@@ -21,20 +21,35 @@ import {
   Tablet,
   Laptop,
 } from 'lucide-react';
-import { fetchAdminTelemetry, wipeAdminTelemetry } from '../lib/telemetryService';
+import { fetchAdminTelemetry, wipeAdminTelemetry } from '../lib/adminSentinelApi';
 
 export default function AdminStandaloneApp() {
+  // Check if uncloak trigger or secret key is present in URL or session
+  const [isCloaked, setIsCloaked] = useState(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const hasUrlSecret = params.get('gate') || params.get('key') || params.get('secret') || params.get('token');
+      const hasSession = sessionStorage.getItem('omnidex_sentinel_token');
+      // If no valid URL parameter or active session token, start cloaked as 404
+      return !(hasUrlSecret || hasSession);
+    } catch {
+      return true;
+    }
+  });
+
   const [adminKey, setAdminKey] = useState(() => {
     try {
-      const urlKey = new URLSearchParams(window.location.search).get('key');
-      if (urlKey) {
+      const params = new URLSearchParams(window.location.search);
+      const urlSecret = params.get('gate') || params.get('key') || params.get('secret') || params.get('token');
+      if (urlSecret) {
+        // Strip sensitive secret parameter from URL and browser history immediately
         const cleanUrl = new URL(window.location.href);
-        cleanUrl.searchParams.delete('key');
+        ['gate', 'key', 'secret', 'token'].forEach((k) => cleanUrl.searchParams.delete(k));
         window.history.replaceState({}, document.title, cleanUrl.toString());
-        return urlKey;
+        return urlSecret;
       }
     } catch {}
-    return localStorage.getItem('omnidex_sentinel_token') || '';
+    return sessionStorage.getItem('omnidex_sentinel_token') || '';
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -45,6 +60,38 @@ export default function AdminStandaloneApp() {
   const [copiedIp, setCopiedIp] = useState(null);
   const [actionNotice, setActionNotice] = useState(null);
   const [autoRefresh, setAutoRefresh] = useState(false);
+  const [cloakTapCount, setCloakTapCount] = useState(0);
+
+  // Keyboard shortcut listener to uncloak (Ctrl+Shift+L or Cmd+Shift+L)
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === 'l') {
+        e.preventDefault();
+        setIsCloaked(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  // 5-tap on 404 header to uncloak
+  const handle404Tap = () => {
+    setCloakTapCount((prev) => {
+      const next = prev + 1;
+      if (next >= 5) {
+        setIsCloaked(false);
+        return 0;
+      }
+      return next;
+    });
+  };
+
+  useEffect(() => {
+    if (cloakTapCount > 0) {
+      const timer = setTimeout(() => setCloakTapCount(0), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [cloakTapCount]);
 
   // Authenticate and load data
   const handleAuthenticate = async (e) => {
@@ -61,7 +108,9 @@ export default function AdminStandaloneApp() {
       const res = await fetchAdminTelemetry(adminKey.trim());
       setData(res);
       setIsAuthenticated(true);
-      localStorage.setItem('omnidex_sentinel_token', adminKey.trim());
+      setIsCloaked(false);
+      // Use sessionStorage so credentials expire when browser tab is closed
+      sessionStorage.setItem('omnidex_sentinel_token', adminKey.trim());
     } catch (err) {
       setErrorMsg(err.message || 'Access Denied: Invalid Master Admin Key.');
       setIsAuthenticated(false);
@@ -70,12 +119,12 @@ export default function AdminStandaloneApp() {
     }
   };
 
-  // Try auto-authenticating if key is already cached
+  // Try auto-authenticating if key is available and uncloaked
   useEffect(() => {
-    if (adminKey && !isAuthenticated) {
+    if (!isCloaked && adminKey && !isAuthenticated) {
       handleAuthenticate();
     }
-  }, []);
+  }, [isCloaked, adminKey]);
 
   // Auto-refresh interval
   useEffect(() => {
@@ -122,12 +171,13 @@ export default function AdminStandaloneApp() {
     }
   };
 
-  // Lock and log out
+  // Lock and log out (Restores 404 Cloak)
   const handleLock = () => {
     setIsAuthenticated(false);
     setAdminKey('');
-    localStorage.removeItem('omnidex_sentinel_token');
+    sessionStorage.removeItem('omnidex_sentinel_token');
     setData(null);
+    setIsCloaked(true);
   };
 
   // Export CSV
@@ -191,6 +241,39 @@ export default function AdminStandaloneApp() {
     return <Laptop className="w-4 h-4 text-cyan-400" />;
   };
 
+  // 1. CAMOUFLAGE 404 CLOAK (Shown to any scanner, bot, or unauthorized visitor)
+  if (isCloaked) {
+    return (
+      <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col items-center justify-center p-6 text-center select-none font-sans">
+        <div className="max-w-md space-y-4">
+          <div
+            onClick={handle404Tap}
+            className="text-7xl font-extrabold text-zinc-800 font-mono tracking-wider cursor-default select-none transition-colors hover:text-zinc-700 active:scale-95"
+            title=""
+          >
+            404
+          </div>
+          <h1 className="text-xl font-bold text-white tracking-tight">
+            Page Not Found
+          </h1>
+          <p className="text-xs text-zinc-500 leading-relaxed max-w-xs mx-auto">
+            The page you are looking for doesn't exist, has been removed, or is temporarily unavailable.
+          </p>
+          <div className="pt-3">
+            <a
+              href="/"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-zinc-900 hover:bg-zinc-800 border border-zinc-800 text-xs text-zinc-300 hover:text-white transition-all shadow-sm"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Back to Library</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // 2. UNCLOAKED SENTINEL COMMAND PORTAL
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
       {/* Top Navbar */}
@@ -215,16 +298,14 @@ export default function AdminStandaloneApp() {
         </div>
 
         <div className="flex items-center gap-3">
-          {isAuthenticated && (
-            <button
-              onClick={handleLock}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-300 transition-all border border-zinc-700"
-              title="Lock Console"
-            >
-              <Lock className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Lock Console</span>
-            </button>
-          )}
+          <button
+            onClick={handleLock}
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-xs font-medium text-zinc-300 transition-all border border-zinc-700"
+            title="Lock and Cloak Console"
+          >
+            <Lock className="w-3.5 h-3.5" />
+            <span>Lock & Cloak</span>
+          </button>
 
           <a
             href="/"
@@ -247,7 +328,7 @@ export default function AdminStandaloneApp() {
           </div>
         )}
 
-        {/* 1. VAULT GATEKEEPER FORM (UNAUTHENTICATED) */}
+        {/* VAULT GATEKEEPER FORM (UNAUTHENTICATED) */}
         {!isAuthenticated ? (
           <div className="my-auto py-12 px-4 max-w-md mx-auto w-full text-center space-y-6">
             <div className="w-20 h-20 rounded-3xl bg-cyan-500/10 border border-cyan-500/25 text-cyan-400 mx-auto flex items-center justify-center shadow-2xl">
@@ -293,7 +374,7 @@ export default function AdminStandaloneApp() {
             </div>
           </div>
         ) : (
-          /* 2. AUTHENTICATED COMMAND CENTER */
+          /* AUTHENTICATED COMMAND CENTER */
           <div className="space-y-6">
             {/* KPI Cards */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">

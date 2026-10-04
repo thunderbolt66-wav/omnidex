@@ -1,14 +1,11 @@
 // ==============================================================================
-// Omnidex Telemetry & Visitor Intelligence Client Engine
-// Silent, zero-latency visitor telemetry capture & secure admin gateway
+// Omnidex Visitor Tracker (Client Side)
+// Strictly write-only. Contains ZERO admin routes, ZERO credentials, ZERO admin code.
 // ==============================================================================
 
 const SESSION_KEY = 'omnidex_client_session_id';
 
-/**
- * Get or generate persistent session ID
- */
-export function getOrCreateSessionId() {
+function getOrCreateSessionId() {
   try {
     let sid = sessionStorage.getItem(SESSION_KEY);
     if (!sid) {
@@ -21,9 +18,6 @@ export function getOrCreateSessionId() {
   }
 }
 
-/**
- * Determine device form factor
- */
 function getDeviceType() {
   const ua = navigator.userAgent || '';
   if (/tablet|ipad|playbook|silk/i.test(ua)) return 'Tablet';
@@ -32,7 +26,7 @@ function getDeviceType() {
 }
 
 /**
- * Ping backend with telemetry payload
+ * Ping backend with telemetry payload (write-only)
  */
 export async function trackPageView({ tab = 'home', theme = 'default' } = {}) {
   try {
@@ -51,61 +45,14 @@ export async function trackPageView({ tab = 'home', theme = 'default' } = {}) {
       connection: navigator.connection?.effectiveType || 'unknown',
     };
 
-    // Use non-blocking fetch with keepalive
+    // Non-blocking write-only ping
     await fetch('/api/track-visit', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload),
       keepalive: true,
     }).catch(() => {});
-  } catch (err) {
-    // Fail silently so visitor experience is never interrupted
+  } catch {
+    // Fail silently
   }
-}
-
-/**
- * Fetch owner-only telemetry dossier (Guarded by Master Admin Key)
- */
-export async function fetchAdminTelemetry(adminKey) {
-  if (!adminKey) {
-    throw new Error('Master Admin Key is required.');
-  }
-
-  const res = await fetch('/api/admin-telemetry', {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-admin-key': adminKey.trim(),
-    },
-  });
-
-  if (res.status === 401) {
-    throw new Error('Access Denied: Incorrect Master Admin Key.');
-  }
-
-  if (!res.ok) {
-    const errData = await res.json().catch(() => ({}));
-    throw new Error(errData.message || 'Failed to retrieve telemetry data.');
-  }
-
-  return await res.json();
-}
-
-/**
- * Clear all visitor logs (Guarded by Master Admin Key)
- */
-export async function wipeAdminTelemetry(adminKey) {
-  const res = await fetch('/api/admin-telemetry', {
-    method: 'DELETE',
-    headers: {
-      'Content-Type': 'application/json',
-      'x-admin-key': adminKey.trim(),
-    },
-  });
-
-  if (!res.ok) {
-    throw new Error('Failed to wipe telemetry logs.');
-  }
-
-  return await res.json();
 }
