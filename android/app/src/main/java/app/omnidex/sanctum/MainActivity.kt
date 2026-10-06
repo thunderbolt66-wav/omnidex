@@ -3,27 +3,30 @@ package app.omnidex.sanctum
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.webkit.ConsoleMessage
 import android.webkit.RenderProcessGoneDetail
 import android.webkit.ValueCallback
 import android.webkit.WebChromeClient
+import android.webkit.WebResourceError
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import android.widget.FrameLayout
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.webkit.WebViewAssetLoader
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var webView: WebView
+    private var webView: WebView? = null
     private var filePathCallback: ValueCallback<Array<Uri>>? = null
 
     private val fileChooserLauncher = registerForActivityResult(
@@ -46,21 +49,44 @@ class MainActivity : AppCompatActivity() {
         filePathCallback = null
     }
 
-    @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        try {
+            // Apply obsidian background to decorView immediately
+            window.decorView.setBackgroundColor(Color.parseColor("#0A0C10"))
 
-        webView = findViewById(R.id.webView)
-        configureWebView()
-        setupBackNavigation()
+            val rootLayout = FrameLayout(this).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                setBackgroundColor(Color.parseColor("#0A0C10"))
+            }
 
-        loadSanctumApp()
+            val wv = WebView(this).apply {
+                layoutParams = FrameLayout.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                setBackgroundColor(Color.parseColor("#0A0C10"))
+            }
+
+            rootLayout.addView(wv)
+            setContentView(rootLayout)
+
+            webView = wv
+            configureWebView(wv)
+            setupBackNavigation(wv)
+
+            wv.loadUrl("https://appassets.androidplatform.net/index.html")
+        } catch (t: Throwable) {
+            Log.e("OmnidexCrash", "Startup exception caught and absorbed", t)
+        }
     }
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun configureWebView() {
-        val settings = webView.settings
+    private fun configureWebView(wv: WebView) {
+        val settings = wv.settings
         settings.javaScriptEnabled = true
         settings.domStorageEnabled = true
         settings.databaseEnabled = true
@@ -76,47 +102,76 @@ class MainActivity : AppCompatActivity() {
         settings.displayZoomControls = false
         settings.textZoom = 100
 
-        // Hardware acceleration & styling to eliminate white flash
-        webView.setLayerType(View.LAYER_TYPE_HARDWARE, null)
-        webView.setBackgroundColor(0xFF0A0C10.toInt())
-        webView.overScrollMode = View.OVER_SCROLL_NEVER
+        wv.setLayerType(View.LAYER_TYPE_HARDWARE, null)
+        wv.overScrollMode = View.OVER_SCROLL_NEVER
 
-        val assetLoader = WebViewAssetLoader.Builder()
-            .setDomain("appassets.androidplatform.net")
-            .addPathHandler("/assets/", WebViewAssetLoader.AssetsPathHandler(this))
-            .build()
-
-        webView.webViewClient = object : WebViewClient() {
+        wv.webViewClient = object : WebViewClient() {
             override fun shouldInterceptRequest(
                 view: WebView?,
                 request: WebResourceRequest?
             ): WebResourceResponse? {
                 val url = request?.url ?: return null
-                return assetLoader.shouldInterceptRequest(url)
+                val host = url.host ?: ""
+
+                // Handle local bundled assets
+                if (host.equals("appassets.androidplatform.net", ignoreCase = true) ||
+                    host.equals("localhost", ignoreCase = true)
+                ) {
+                    var path = url.path ?: "/"
+                    if (path == "/" || path.isEmpty()) {
+                        path = "/index.html"
+                    }
+
+                    // Clean and normalize asset subpath
+                    val cleanPath = path.trimStart('/')
+                        .removePrefix("assets/www/")
+                        .removePrefix("www/")
+
+                    val assetPath = "www/$cleanPath"
+
+                    try {
+                        val stream = assets.open(assetPath)
+                        val mimeType = getMimeType(cleanPath)
+                        val responseHeaders = mutableMapOf(
+                            "Access-Control-Allow-Origin" to "*",
+                            "Cache-Control" to "no-cache",
+                            "Content-Type" to mimeType
+                        )
+                        return WebResourceResponse(mimeType, "UTF-8", 200, "OK", responseHeaders, stream)
+                    } catch (e: Exception) {
+                        Log.w("OmnidexAsset", "Asset not found: $assetPath (${e.message})")
+                    }
+                }
+
+                // Default network handling for remote APIs (Google Books, Vercel telemetry, fonts)
+                return null
             }
 
             override fun onRenderProcessGone(
                 view: WebView?,
                 detail: RenderProcessGoneDetail?
             ): Boolean {
-                Log.w("OmnidexNative", "WebView render process recovered smoothly")
-                view?.destroy()
-                recreate()
+                Log.w("OmnidexNative", "WebView render process reclaimed. Recovering gracefully.")
+                try {
+                    view?.destroy()
+                    recreate()
+                } catch (e: Exception) {
+                    Log.e("OmnidexNative", "Recovery recreation error", e)
+                }
                 return true
             }
 
-            override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                super.onPageStarted(view, url, favicon)
-                Log.d("OmnidexNative", "Page loading: $url")
-            }
-
-            override fun onPageFinished(view: WebView?, url: String?) {
-                super.onPageFinished(view, url)
-                Log.d("OmnidexNative", "Page ready: $url")
+            override fun onReceivedError(
+                view: WebView?,
+                request: WebResourceRequest?,
+                error: WebResourceError?
+            ) {
+                super.onReceivedError(view, request, error)
+                Log.w("OmnidexNative", "Resource error on ${request?.url}: ${error?.description}")
             }
         }
 
-        webView.webChromeClient = object : WebChromeClient() {
+        wv.webChromeClient = object : WebChromeClient() {
             override fun onConsoleMessage(consoleMessage: ConsoleMessage?): Boolean {
                 if (consoleMessage != null) {
                     Log.d("OmnidexWeb", "[${consoleMessage.messageLevel()}] ${consoleMessage.message()} (${consoleMessage.sourceId()}:${consoleMessage.lineNumber()})")
@@ -150,11 +205,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupBackNavigation() {
+    private fun setupBackNavigation(wv: WebView) {
         onBackPressedDispatcher.addCallback(this, object : OnBackPressedCallback(true) {
             override fun handleOnBackPressed() {
-                if (webView.canGoBack()) {
-                    webView.goBack()
+                if (wv.canGoBack()) {
+                    wv.goBack()
                 } else {
                     isEnabled = false
                     onBackPressedDispatcher.onBackPressed()
@@ -163,13 +218,30 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
-    private fun loadSanctumApp() {
-        webView.loadUrl("https://appassets.androidplatform.net/assets/www/index.html")
+    private fun getMimeType(filePath: String): String {
+        val lower = filePath.lowercase()
+        return when {
+            lower.endsWith(".html") -> "text/html"
+            lower.endsWith(".js") || lower.endsWith(".mjs") -> "application/javascript"
+            lower.endsWith(".css") -> "text/css"
+            lower.endsWith(".svg") -> "image/svg+xml"
+            lower.endsWith(".png") -> "image/png"
+            lower.endsWith(".jpg") || lower.endsWith(".jpeg") -> "image/jpeg"
+            lower.endsWith(".webp") -> "image/webp"
+            lower.endsWith(".json") -> "application/json"
+            lower.endsWith(".woff2") -> "font/woff2"
+            lower.endsWith(".woff") -> "font/woff"
+            lower.endsWith(".ttf") -> "font/ttf"
+            else -> "application/octet-stream"
+        }
     }
 
     override fun onDestroy() {
-        webView.stopLoading()
-        webView.destroy()
+        webView?.let {
+            it.stopLoading()
+            it.destroy()
+        }
+        webView = null
         super.onDestroy()
     }
 }

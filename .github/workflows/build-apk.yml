@@ -51,17 +51,22 @@ jobs:
       - name: Grant Execute Permission for Gradle
         run: chmod +x android/gradlew
 
-      - name: Build Android Debug APK
+      - name: Build Android APK
         working-directory: android
         env:
           ANDROID_HOME: ${{ env.ANDROID_HOME }}
-        run: ./gradlew assembleDebug --stacktrace
+        run: ./gradlew assembleRelease assembleDebug --stacktrace
 
       - name: Rename and Prepare APK
         run: |
           mkdir -p build-output
-          cp android/app/build/outputs/apk/debug/app-debug.apk build-output/Omnidex-v1.3.0.apk
-          cp android/app/build/outputs/apk/debug/app-debug.apk build-output/Omnidex-latest.apk
+          if [ -f android/app/build/outputs/apk/release/app-release.apk ]; then
+            cp android/app/build/outputs/apk/release/app-release.apk build-output/Omnidex-v1.3.0.apk
+            cp android/app/build/outputs/apk/release/app-release.apk build-output/Omnidex-latest.apk
+          else
+            cp android/app/build/outputs/apk/debug/app-debug.apk build-output/Omnidex-v1.3.0.apk
+            cp android/app/build/outputs/apk/debug/app-debug.apk build-output/Omnidex-latest.apk
+          fi
           ls -la build-output/
 
       - name: Upload APK Artifact
