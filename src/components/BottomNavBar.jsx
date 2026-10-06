@@ -62,10 +62,10 @@ export default function BottomNavBar({ activeTab, onTabChange }) {
   return (
     <nav
       aria-label="Omnidex Primary Navigation"
-      className="fixed bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-auto select-none"
+      className="fixed bottom-[max(1rem,env(safe-area-inset-bottom,1rem))] sm:bottom-6 left-1/2 -translate-x-1/2 z-50 pointer-events-auto select-none"
     >
       <div
-        className={`glass-dock rounded-full px-2 sm:px-2.5 py-1.5 sm:py-2 flex items-center gap-1 sm:gap-2 max-w-[96vw] border ${themeStyles.dock}`}
+        className={`glass-dock rounded-full px-1.5 sm:px-2.5 py-1.5 sm:py-2 flex items-center gap-0.5 sm:gap-2 max-w-[calc(100vw-1rem)] sm:max-w-[96vw] border ${themeStyles.dock}`}
       >
         {tabs.map((tab) => {
           const Icon = tab.icon;

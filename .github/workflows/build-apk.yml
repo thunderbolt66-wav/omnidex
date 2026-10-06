@@ -1,0 +1,100 @@
+name: Build & Release Standalone Android APK
+
+on:
+  push:
+    branches: ['main']
+    paths:
+      - 'android/**'
+      - 'src/**'
+      - 'public/**'
+      - 'package.json'
+      - 'vite.config.js'
+      - '.github/workflows/build-apk.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-apk:
+    name: Build Standalone APK
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Web Dependencies
+        run: npm ci
+
+      - name: Build Web Application
+        run: npm run build
+
+      - name: Sync Web Dist to Android Assets
+        run: |
+          mkdir -p android/app/src/main/assets/www
+          cp -r dist/* android/app/src/main/assets/www/
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Grant Execute Permission for Gradle
+        run: chmod +x android/gradlew
+
+      - name: Build Android Debug & Release APK
+        working-directory: android
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Rename and Prepare APK
+        run: |
+          mkdir -p build-output
+          cp android/app/build/outputs/apk/debug/app-debug.apk build-output/Omnidex-v1.3.0.apk
+          cp android/app/build/outputs/apk/debug/app-debug.apk build-output/Omnidex-latest.apk
+          ls -la build-output/
+
+      - name: Upload APK Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Omnidex-Standalone-APK
+          path: build-output/*.apk
+          retention-days: 90
+
+      - name: Create or Update GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/heads/main')
+        with:
+          tag_name: v1.3.0-apk
+          target_commitish: ${{ github.sha }}
+          name: 'Omnidex v1.3.0 • Standalone Android APK'
+          body: |
+            ### 📱 Omnidex v1.3.0 Standalone Android Application
+            
+            This release contains the standalone native Android APK package for Omnidex.
+            
+            #### 🌟 Highlights
+            - **Matching In-App Golden Compass Emblem**: Custom icon rendered to all mipmap densities (`mdpi`, `hdpi`, `xhdpi`, `xxhdpi`, `xxxhdpi`).
+            - **100% Offline Standalone Bundle**: All reading sanctum assets, fonts, and engines bundled locally inside the APK.
+            - **Crashproof WebView Architecture**: Built-in process recovery (`onRenderProcessGone`), hardware acceleration, and orientation stability.
+            - **Zero White-Flash Launch**: Obsidian-dark backdrop pre-boot styling.
+            - **Universal Mobile Scaling**: Adaptive bottom navigation dock, edge-to-edge layout, and safe-area insets.
+            
+            #### 📥 Download
+            - Download **`Omnidex-v1.3.0.apk`** below to install directly on any Android device running Android 7.0+ (API 24 to 36).
+          files: |
+            build-output/Omnidex-v1.3.0.apk
+            build-output/Omnidex-latest.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

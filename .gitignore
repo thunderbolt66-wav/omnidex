@@ -28,6 +28,12 @@ admin-secret*
 *.suo
 *.ntvs*
 *.njsproj
+
+# Android
+android/local.properties
+android/.gradle
+android/**/build/
+android/app/build/
 *.sln
 *.sw?
 *.zip
